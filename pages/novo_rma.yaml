@@ -1,0 +1,147 @@
+id: novo_rma
+type: Box
+style:
+  background: '#ababab'
+layout:
+  contentAlign: center
+blocks:
+  - id: logo
+    type: Html
+    style:
+      borderBottom: '0.3em solid #000'
+    properties:
+      html: '<div style="background: #fff; text-align: center; padding: 10px"><img src="http://modaverao.com.br/logo.png" height="80px"/></div>'
+  - id: content_box
+    type: Box
+    style:
+      maxWidth: 660
+      padding: 30px 30px 60px 30px
+      minHeight: 90vh
+      background: '#fff'
+    layout:
+      contentGutter: 20
+    blocks:
+      - id: title
+        type: Title
+        style:
+          textAlign: center
+          paddingTop: 20
+        properties:
+          content: Novo RMA
+          level: 1
+
+      - id: nome
+        type: TextInput
+        required: true
+        properties:
+          title: Nome do cliente
+          size: large
+
+      - id: cpf
+        type: TextInput
+        required: true
+        properties:
+          title: CPF
+          size: large     
+
+      - id: telefone
+        type: TextInput
+        required: true
+        properties:
+          title: Telefone
+          size: large          
+
+      - id: subtitulo_dados_produto
+        type: Title
+        style:
+          textAlign: center
+        properties:
+          content: Dados do produto
+          level: 4
+
+      - id: codigo_produto
+        type: TextInput
+        required: true
+        properties:
+          title: Código do produto
+          size: large          
+
+      - id: marca
+        type: TextInput
+        required: true
+        properties:
+          title: Marca
+          size: large
+
+      - id: descricao_produto
+        type: TextInput
+        # required: true
+        properties:
+          title: Descrição
+          size: large
+
+      - id: nf_venda
+        type: TextInput
+        # required: true
+        properties:
+          title: Número do Cupom de Venda
+          size: large
+
+      - id: data_venda
+        type: DateSelector
+        properties:
+          title: Data da venda
+          disabledDates:
+            dates: []
+            ranges: []
+          format: DD/MM/YYYY
+          placeholder: Selecione a data da venda       
+
+      - id: motivo_devolucao
+        type: TextInput
+        required: true
+        properties:
+          title: Motivo da devolução
+          size: large
+
+      - id: save
+        type: Button
+        requests:
+          - id: gravar_rma
+            type: GoogleSheetAppendOne
+            connectionId: rma_sheet
+            payload:
+              row:
+                _state: true
+            properties:
+              row:
+                _payload: row
+        properties:
+          title: Enviar
+          block: true
+          color: '#000'
+          icon: AiOutlineCheck
+          size: large                
+        events:
+          onClick:
+            - id: set_state # Add a timestamp variable to the context state.
+              type: SetState
+              params:
+                id:
+                  _moment.format:
+                    on: 
+                      _date: now
+                    format: 'YYYYMMDD-HHmmss-SSS'
+            - id: validate # Then validate our webform input.
+              type: Validate
+            - id: call_save # Then call the `gravar_rma` request which will insert the new response record on the survey Google sheet.
+              type: Request
+              params: gravar_rma
+            - id: enviar_ver_rma # Lastly redirect the customer to the `think-you` page.
+              type: Link
+              params:
+                pageId: ver_rma
+                urlQuery:
+                  id:
+                    _state: timestamp
+

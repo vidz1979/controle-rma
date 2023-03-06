@@ -1,0 +1,24 @@
+name: controle-rma
+lowdefy: 4.0.0-alpha.37
+licence: MIT
+
+connections:
+  # Create a connection to our Google sheet which will store our survey data.
+  - id: rma_sheet
+    type: GoogleSheet
+    properties:
+      client_email:
+        _secret: SHEETS_CLIENT_EMAIL
+      # Here base64 decoding is used to decode our SHEETS_PRIVATE_KEY environment variable. Our private key was saved as base64 encoded in our Netlify deployment environment variable. This is just a little hack since Netlify has a hard time processing environment variables which contains new line characters.
+      private_key:
+        _base64.decode:
+          _secret: SHEETS_PRIVATE_KEY
+      sheetIndex: 0
+      spreadsheetId: 1g-5Os3LIh9m-k8zYJOfPOl_XMF-odI2EOGQfs_kXzXg
+        # _secret: SHEETS_PRIVATE_KEY      
+      write: true
+
+pages:
+  # Add references to the survey and thank-you pages
+  - _ref: pages/novo_rma.yaml
+  - _ref: pages/ver_rma.yaml
