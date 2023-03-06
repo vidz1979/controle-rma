@@ -143,5 +143,5 @@ blocks:
                 pageId: ver_rma
                 urlQuery:
                   id:
-                    _state: timestamp
+                    _payload: timestamp
 
