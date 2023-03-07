@@ -6,12 +6,14 @@ requests:
   - id: get_rma
     type:  GoogleSheetGetOne
     connectionId: rma_sheet
+    payload:
+      id:
+        _url_query: id
     properties:
       filter:
         id: 
-          $eq: 20230306-181756-049
-            # _url_query: id
-
+          $eq: 
+            _payload: id
 events:
   onInit:
     - id: init_get_rma

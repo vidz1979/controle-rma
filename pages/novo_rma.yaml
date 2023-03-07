@@ -139,9 +139,12 @@ blocks:
               params: gravar_rma
             - id: enviar_ver_rma # Lastly redirect the customer to the `think-you` page.
               type: Link
+              payload:
+                id:
+                  _state: id
               params:
                 pageId: ver_rma
                 urlQuery:
                   id:
-                    _payload: timestamp
+                    _payload: id
 
